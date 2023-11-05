@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { boolean } = require('webidl-conversions');
 
 const { Schema } = mongoose;
 
@@ -59,4 +60,64 @@ const studentSchema = new Schema({
     ref: 'AcademicYear',
     required: true,
   },
+  dateAdmitted: {
+    type: Date,
+    default: Date.now,
+  },
+  examResults: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'ExamResult',
+    },
+  ],
+  program: {
+    type: Schema.Types.ObjectId,
+    ref: 'Program',
+    required: true,
+  },
+  isPromotedToLevel200: {
+    type: boolean,
+    default: false,
+  },
+  isPromotedToLevel300: {
+    type: boolean,
+    default: false,
+  },
+  isPromotedToLevel400: {
+    type: boolean,
+    default: false,
+  },
+  isGraduated: {
+    type: boolean,
+    default: false,
+  },
+  isSuspended: {
+    type: boolean,
+    default: false,
+  },
+  prefectName: {
+    type: String,
+  },
+  behaviorReport: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'BehaviorReport',
+    },
+  ],
+  financialReport: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'FinancialReport',
+    },
+  ],
+  //yearGroup
+  yearGraduated: {
+    type: Schema.Types.ObjectId,
+    ref: 'YearGroup',
+  },
 });
+
+// Model
+const Student = mongoose.model('Student', studentSchema);
+
+module.exports = Student;
