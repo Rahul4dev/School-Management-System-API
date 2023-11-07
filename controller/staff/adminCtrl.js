@@ -67,12 +67,16 @@ exports.getSingleAdminCtrl = (req, res) => {
 //@desc POST: Login Admin
 //@route /api/v1/admins/login
 //@access Private
-exports.adminLoginCtrl = (req, res) => {
+exports.adminLoginCtrl = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    res.status(200).json({
-      status: 'success',
-      data: 'Admin has been logged successfully',
-    });
+    // find user
+    const user = await Admin.findOne({ email });
+    if (!user) return res.json({ message: 'Invalid Login credentials' });
+
+    if (user && (await user.verifyPassword(password)))
+      return res.json({ data: user });
+    else return res.json({ message: 'Invalid Login credentials' });
   } catch (error) {
     res.json({
       status: 'Failed login',
