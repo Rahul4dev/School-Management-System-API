@@ -3,6 +3,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const globalErrorHandler = require('../middlewares/globalErrorHandler.js');
+
 const adminRouter = require('../routes/staff/adminRouter.js');
 const app = express();
 
@@ -12,5 +14,8 @@ app.use(express.json()); // pass incoming data.
 
 //Routes
 app.use('/api/v1/admins', adminRouter);
+
+// Error Handlers Middleware
+app.use(globalErrorHandler);
 
 module.exports = app;
