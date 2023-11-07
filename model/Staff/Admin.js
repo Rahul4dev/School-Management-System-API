@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 // Admin Schema
 const adminSchema = new mongoose.Schema(
@@ -21,9 +22,18 @@ const adminSchema = new mongoose.Schema(
     },
   },
   // TimeStamp to add field of createdAt and updatedAt automatically.
-  { timeStamps: true }
+  { timestamps: true }
 );
 
+// pre-middleware in mongoose to
+adminSchema.pre('save', async function (next) {
+  // if user try to modify existing password
+  if (this.isModified('password')) next();
+  // salt
+  const salt = await bcrypt.genSalt(12);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 // Admin Model
 const Admin = mongoose.model('Admin', adminSchema);
 

@@ -8,6 +8,7 @@ const app = express();
 
 // Middleware configuration
 app.use(morgan('dev'));
+app.use(express.json()); // pass incoming data.
 
 //Routes
 app.use('/api/v1/admins', adminRouter);
