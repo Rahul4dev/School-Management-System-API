@@ -16,7 +16,12 @@ const {
   unWithdrawTeacherAdminCtrl,
   publishExamAdminCtrl,
   unpublishExamAdminCtrl,
-} = require('../../controller/staff/adminCtrl');
+} = require('../../controller/staff/adminCtrl.js');
+
+//middleware
+const isLoggedIn = require('../../middlewares/isLoggedIn.js');
+
+// Our Routes
 
 // Admin Register
 adminRouter.post('/register', registerAdminCtrl);
@@ -25,7 +30,7 @@ adminRouter.post('/register', registerAdminCtrl);
 adminRouter.get('/', getAllAdmins);
 
 //get single admin
-adminRouter.get('/:id', getSingleAdminCtrl);
+adminRouter.get('/:id', isLoggedIn, getSingleAdminCtrl);
 
 // Admin Login
 adminRouter.post('/login', adminLoginCtrl);
