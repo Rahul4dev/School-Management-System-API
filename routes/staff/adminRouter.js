@@ -20,6 +20,7 @@ const {
 
 //middleware
 const isLoggedIn = require('../../middlewares/isLoggedIn.js');
+const isAdmin = require('../../middlewares/isAdmin.js');
 
 // Our Routes
 
@@ -27,10 +28,10 @@ const isLoggedIn = require('../../middlewares/isLoggedIn.js');
 adminRouter.post('/register', registerAdminCtrl);
 
 //get all admins
-adminRouter.get('/', isLoggedIn, getAllAdmins);
+adminRouter.get('/', isLoggedIn, isAdmin, getAllAdmins);
 
 //get single admin
-adminRouter.get('/profile', isLoggedIn, getAdminProfileCtrl);
+adminRouter.get('/profile', isLoggedIn, isAdmin, getAdminProfileCtrl);
 
 // Admin Login
 adminRouter.post('/login', adminLoginCtrl);
