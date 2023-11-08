@@ -21,6 +21,7 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res) => {
   });
   res.status(200).json({
     status: 'success',
+    message: 'Admin registered successfully',
     data: user,
   });
 });
@@ -42,7 +43,7 @@ exports.getAllAdmins = (req, res) => {
   }
 };
 
-//@desc Get: Single Admin
+//@desc Get: Single Admin Profile
 //@route /api/v1/admins/:id
 //@access Private
 exports.getAdminProfileCtrl = AsyncHandler(async (req, res) => {
@@ -54,6 +55,7 @@ exports.getAdminProfileCtrl = AsyncHandler(async (req, res) => {
   else {
     res.status(200).json({
       status: 'OK',
+      message: 'Admin profile fetched successfully',
       data: admin,
     });
   }
@@ -69,14 +71,10 @@ exports.adminLoginCtrl = AsyncHandler(async (req, res) => {
   if (!user) return res.json({ message: 'Invalid Login credentials' });
 
   if (user && (await user.verifyPassword(password))) {
-    const token = generateToken(user._id);
-    if (token) {
-      const isVerified = verifyToken(token);
-      console.log(isVerified);
-      // save the user in request object session
-      req.userAuth = user;
-      return res.json({ data: generateToken(user._id), user, isVerified });
-    }
+    return res.json({
+      data: generateToken(user._id),
+      message: 'Admin logged in successfully!',
+    });
   } else {
     return res.json({ message: 'Invalid Login credentials' });
   }
