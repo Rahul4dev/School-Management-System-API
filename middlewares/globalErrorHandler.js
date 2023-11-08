@@ -13,4 +13,10 @@ const globalErrorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = globalErrorHandler;
+// Not Found Error
+const notFoundErrorHandler = (req, res, next) => {
+  const err = new Error("Can't find " + req.originalUrl + ' on the server ');
+  next(err);
+};
+
+module.exports = { globalErrorHandler, notFoundErrorHandler };
