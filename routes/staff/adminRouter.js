@@ -6,7 +6,7 @@ const adminRouter = express.Router();
 const {
   registerAdminCtrl,
   getAllAdmins,
-  getSingleAdminCtrl,
+  getAdminProfileCtrl,
   adminLoginCtrl,
   updateAdminCtrl,
   deleteAdminCtrl,
@@ -30,7 +30,7 @@ adminRouter.post('/register', registerAdminCtrl);
 adminRouter.get('/', getAllAdmins);
 
 //get single admin
-adminRouter.get('/:id', isLoggedIn, getSingleAdminCtrl);
+adminRouter.get('/profile', isLoggedIn, getAdminProfileCtrl);
 
 // Admin Login
 adminRouter.post('/login', adminLoginCtrl);
