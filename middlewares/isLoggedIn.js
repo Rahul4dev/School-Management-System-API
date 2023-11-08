@@ -1,8 +1,20 @@
-const isLoggedIn = (req, res, next) => {
-  const isLoggedIn = req.userAuth;
-  if (isLoggedIn) next();
-  else {
-    const err = new Error('You are not logged in');
+const Admin = require('../model/staff/Admin');
+const verifyToken = require('../utils/verifyToken');
+
+const isLoggedIn = async (req, res, next) => {
+  // get token from header
+  const bearerAuth = req.headers.authorization;
+  const bearerToken = bearerAuth.split(' ')[1];
+  // verify token
+  const isVerified = verifyToken(bearerToken);
+  // find the Admin user
+  const user = await Admin.findById(isVerified.id).select('name email role');
+  // save the user into req.obj
+  if (isVerified) {
+    req.userAuth = user;
+    next();
+  } else {
+    const err = new Error('Token is expired/invalid');
     next(err);
   }
 };
