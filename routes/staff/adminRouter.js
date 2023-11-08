@@ -27,7 +27,7 @@ const isLoggedIn = require('../../middlewares/isLoggedIn.js');
 adminRouter.post('/register', registerAdminCtrl);
 
 //get all admins
-adminRouter.get('/', getAllAdmins);
+adminRouter.get('/', isLoggedIn, getAllAdmins);
 
 //get single admin
 adminRouter.get('/profile', isLoggedIn, getAdminProfileCtrl);

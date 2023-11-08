@@ -3,8 +3,7 @@ const verifyToken = require('../utils/verifyToken');
 
 const isLoggedIn = async (req, res, next) => {
   // get token from header
-  const bearerAuth = req.headers.authorization;
-  const bearerToken = bearerAuth.split(' ')[1];
+  const bearerToken = req.headers?.authorization?.split(' ')[1];
   // verify token
   const isVerified = verifyToken(bearerToken);
   // find the Admin user
