@@ -5,6 +5,8 @@ const academicYearRouter = express.Router();
 // Controllers
 const {
   createAcademicYear,
+  getAllAcademicYears,
+  getSingleAcademicYear,
 } = require('../../controller/academics/academicYearCtrl.js');
 
 // Middlewares
@@ -13,5 +15,7 @@ const isLoggedIn = require('../../middlewares/isLoggedIn.js');
 
 // Routes
 academicYearRouter.post('/', isLoggedIn, isAdmin, createAcademicYear);
+academicYearRouter.get('/', isLoggedIn, isAdmin, getAllAcademicYears);
+academicYearRouter.get('/:id', isLoggedIn, isAdmin, getSingleAcademicYear);
 
 module.exports = academicYearRouter;
