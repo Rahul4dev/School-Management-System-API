@@ -56,20 +56,20 @@ const adminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// pre-middleware in mongoose to modify password, if user is verified.
-adminSchema.pre('save', async function (next) {
-  // if user try to modify existing password
-  if (this.isModified('password')) next();
-  // salt
-  const salt = await bcrypt.genSalt(12);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// // pre-middleware in mongoose to modify password, if user is verified.
+// adminSchema.pre('save', async function (next) {
+//   // if user try to modify existing password
+//   if (this.isModified('password')) next();
+//   // salt
+//   const salt = await bcrypt.genSalt(12);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
-// verify password
-adminSchema.methods.verifyPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
+// // verify password
+// adminSchema.methods.verifyPassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
 // Admin Model
 const Admin = model('Admin', adminSchema);
 

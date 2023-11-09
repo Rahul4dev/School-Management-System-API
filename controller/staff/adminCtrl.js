@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const AsyncHandler = require('express-async-handler');
 const Admin = require('../../model/staff/Admin.js');
 const generateToken = require('../../utils/generateToken.js');
@@ -10,14 +11,15 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   // Check if the Admin is already exists
   const adminFound = await Admin.findOne({ email });
-  if (adminFound) {
-    throw new Error('Admin already exists');
-  }
+  if (adminFound) throw new Error('Admin already exists');
+  // hash the password
+  const salt = await bcrypt.genSalt(12);
+  const hashedPassword = await bcrypt.hash(password, salt);
   // register the Admin
   const user = await Admin.create({
     name,
     email,
-    password,
+    password: hashedPassword,
   });
   res.status(200).json({
     status: 'success',
@@ -65,32 +67,47 @@ exports.adminLoginCtrl = AsyncHandler(async (req, res) => {
   const user = await Admin.findOne({ email });
   if (!user) return res.json({ message: 'Invalid Login credentials' });
 
-  if (user && (await user.verifyPassword(password))) {
+  // verify password
+  const isMatched = await bcrypt.compare(password, user.password);
+
+  if (!isMatched) return res.json({ message: 'Invalid Login credentials' });
+  else {
     return res.json({
       data: generateToken(user._id),
       message: 'Admin logged in successfully!',
     });
-  } else {
-    return res.json({ message: 'Invalid Login credentials' });
   }
 });
 
 //@desc PUT: Update Admin
 //@route /api/v1/admins/:id
 //@access Private
-exports.updateAdminCtrl = (req, res) => {
-  try {
+exports.updateAdminCtrl = AsyncHandler(async (req, res) => {
+  const { email, name, password } = req.body;
+  // if email exists,
+  const emailExist = await Admin.findOne({ email });
+  if (emailExist) throw new Error('Email is already taken');
+  else {
+    // update
+    const admin = await Admin.findByIdAndUpdate(
+      req.userAuth._id,
+      {
+        email,
+        password,
+        name,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     res.status(200).json({
       status: 'success',
-      data: 'Admin has been updated successfully',
-    });
-  } catch (error) {
-    res.json({
-      status: 'Failed',
-      error: error.message,
+      message: 'Admin updated successfully',
+      data: admin,
     });
   }
-};
+});
 
 //@desc DELETE: Admin
 //@route /api/v1/admins/:id
