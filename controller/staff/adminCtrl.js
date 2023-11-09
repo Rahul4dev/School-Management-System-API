@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const AsyncHandler = require('express-async-handler');
 const Admin = require('../../model/staff/Admin.js');
 const generateToken = require('../../utils/generateToken.js');
-const verifyToken = require('../../utils/verifyToken.js');
+const { hashPassword, isPasswordMatched } = require('../../utils/helpers.js');
 
 //@desc POST: Register new Admin
 //@route /api/v1/admins/register
@@ -12,14 +12,12 @@ exports.registerAdminCtrl = AsyncHandler(async (req, res) => {
   // Check if the Admin is already exists
   const adminFound = await Admin.findOne({ email });
   if (adminFound) throw new Error('Admin already exists');
-  // hash the password
-  const salt = await bcrypt.genSalt(12);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  // register the Admin
+
+  // register the Admin with hashed password
   const user = await Admin.create({
     name,
     email,
-    password: hashedPassword,
+    password: await hashPassword(password),
   });
   res.status(200).json({
     status: 'success',
@@ -68,7 +66,7 @@ exports.adminLoginCtrl = AsyncHandler(async (req, res) => {
   if (!user) return res.json({ message: 'Invalid Login credentials' });
 
   // verify password
-  const isMatched = await bcrypt.compare(password, user.password);
+  const isMatched = await isPasswordMatched(password, user.password);
 
   if (!isMatched) return res.json({ message: 'Invalid Login credentials' });
   else {
@@ -87,13 +85,33 @@ exports.updateAdminCtrl = AsyncHandler(async (req, res) => {
   // if email exists,
   const emailExist = await Admin.findOne({ email });
   if (emailExist) throw new Error('Email is already taken');
-  else {
+
+  // check if user updating the password
+  if (password) {
+    // update password along with email, name and hashed password
+    const admin = await Admin.findByIdAndUpdate(
+      req.userAuth._id,
+      {
+        email,
+        name,
+        password: await hashPassword(password),
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
+      status: 'success',
+      message: 'Admin updated successfully',
+      data: admin,
+    });
+  } else {
     // update
     const admin = await Admin.findByIdAndUpdate(
       req.userAuth._id,
       {
         email,
-        password,
         name,
       },
       {
