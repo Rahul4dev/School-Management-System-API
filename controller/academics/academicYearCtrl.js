@@ -43,12 +43,12 @@ exports.getAllAcademicYears = AsyncHandler(async (req, res) => {
     data: academicYears,
   });
 });
+
 //@desc Get single academic year
 //@route GET /api/v1/academic-years/:id
 //@access Private
 exports.getSingleAcademicYear = AsyncHandler(async (req, res) => {
   const academicYear = await AcademicYear.findById(req.params.id);
-  console.log(req.params.id);
   if (!academicYear)
     throw new Error('There is no such Academic Year, please try again!');
 
@@ -56,5 +56,44 @@ exports.getSingleAcademicYear = AsyncHandler(async (req, res) => {
     status: 'success',
     message: 'Academic Year fetched successfully',
     data: academicYear,
+  });
+});
+
+//@desc Update single academic year
+//@route PUT /api/v1/academic-years/:id
+//@access Private
+exports.updateAcademicYear = AsyncHandler(async (req, res) => {
+  const { name, fromYear, toYear } = req.body;
+  // if name exists
+  const academicYearFound = await AcademicYear.findOne({ name });
+  if (academicYearFound) throw new Error(`${name} already exists`);
+  const academicYear = await AcademicYear.findByIdAndUpdate(
+    req.params.id,
+    {
+      name,
+      fromYear,
+      toYear,
+      createdBy: req.userAuth._id,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  res.status(200).json({
+    status: 'success',
+    message: 'Academic Year updated successfully',
+    data: academicYear,
+  });
+});
+
+//@desc Delete single academic year
+//@route DELETE /api/v1/academic-years/:id
+//@access Private
+exports.deleteAcademicYear = AsyncHandler(async (req, res) => {
+  await AcademicYear.findByIdAndDelete(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    message: 'Academic Year Deleted successfully',
   });
 });

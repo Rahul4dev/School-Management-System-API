@@ -7,6 +7,8 @@ const {
   createAcademicYear,
   getAllAcademicYears,
   getSingleAcademicYear,
+  updateAcademicYear,
+  deleteAcademicYear,
 } = require('../../controller/academics/academicYearCtrl.js');
 
 // Middlewares
@@ -17,5 +19,7 @@ const isLoggedIn = require('../../middlewares/isLoggedIn.js');
 academicYearRouter.post('/', isLoggedIn, isAdmin, createAcademicYear);
 academicYearRouter.get('/', isLoggedIn, isAdmin, getAllAcademicYears);
 academicYearRouter.get('/:id', isLoggedIn, isAdmin, getSingleAcademicYear);
+academicYearRouter.put('/:id', isLoggedIn, isAdmin, updateAcademicYear);
+academicYearRouter.delete('/:id', isLoggedIn, isAdmin, deleteAcademicYear);
 
 module.exports = academicYearRouter;
