@@ -20,6 +20,10 @@ exports.createAcademicYear = AsyncHandler(async (req, res) => {
     toYear,
     createdBy: req.userAuth._id,
   });
+  // push academicYear into admin profile
+  const admin = await Admin.findById(req.userAuth._id);
+  admin.academicYears.push(academicYearCreated._id);
+  await admin.save();
   res.status(200).json({
     status: 'success',
     message: 'Academic Year created successfully',

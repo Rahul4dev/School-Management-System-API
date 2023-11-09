@@ -2,7 +2,7 @@ const Admin = require('../model/staff/Admin.js');
 
 const isAdmin = async (req, res, next) => {
   // find the Admin user
-  const userId = req.userAuth._id;
+  const userId = req?.userAuth?._id;
 
   const adminFound = await Admin.findById(userId);
 
