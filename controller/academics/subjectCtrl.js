@@ -86,7 +86,7 @@ exports.updateSubject = AsyncHandler(async (req, res) => {
   );
   res.status(200).json({
     status: 'success',
-    message: 'Class Level updated successfully',
+    message: 'Subject updated successfully',
     data: subject,
   });
 });
