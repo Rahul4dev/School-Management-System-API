@@ -51,9 +51,7 @@ const teacherSchema = new Schema(
       default: 'teacher',
     },
     subject: {
-      type: Schema.Types.ObjectId,
-      ref: 'Subject',
-      // required: true,
+      type: String,
     },
     applicationStatus: {
       type: String,
@@ -61,20 +59,14 @@ const teacherSchema = new Schema(
       default: 'pending',
     },
     program: {
-      type: Schema.Types.ObjectId,
-      ref: 'Program',
-      // required: true,
+      type: String,
     },
     // A teacher can teach in more than one class level
     classLevel: {
-      type: Schema.Types.ObjectId,
-      ref: 'ClassLevel',
-      // required: true,
+      type: String,
     },
     academicYear: {
-      type: Schema.Types.ObjectId,
-      ref: 'AcademicYear',
-      // required: true,
+      type: String,
     },
     examsCreated: [
       {
@@ -88,9 +80,7 @@ const teacherSchema = new Schema(
       // required: true,
     },
     academicTerm: {
-      type: Schema.Types.ObjectId,
-      ref: 'AcademicTerm',
-      // required: true,
+      type: String,
     },
   },
   {
