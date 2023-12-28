@@ -10,6 +10,7 @@ const {
 
 const adminRouter = require('../routes/staff/adminRouter.js');
 const teachersRouter = require('../routes/staff/teacherRouter.js');
+const studentRouter = require('../routes/academic/studentRouter.js');
 
 const academicYearRouter = require('../routes/academic/academicYear.js');
 const academicTermRouter = require('../routes/academic/academicTerm.js');
@@ -28,6 +29,7 @@ app.use(express.json()); // pass incoming data.
 //Routes
 app.use('/api/v1/admins', adminRouter);
 app.use('/api/v1/teachers', teachersRouter);
+app.use('/api/v1/students', studentRouter);
 
 app.use('/api/v1/academic-years', academicYearRouter);
 app.use('/api/v1/academic-terms', academicTermRouter);

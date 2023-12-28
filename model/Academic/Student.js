@@ -32,7 +32,7 @@ const studentSchema = new Schema({
       );
     },
   },
-  isWithDrawn: {
+  isWithdrawn: {
     type: Boolean,
     default: false,
   },
@@ -58,7 +58,6 @@ const studentSchema = new Schema({
   academicYear: {
     type: Schema.Types.ObjectId,
     ref: 'AcademicYear',
-    required: true,
   },
   dateAdmitted: {
     type: Date,
@@ -73,26 +72,25 @@ const studentSchema = new Schema({
   program: {
     type: Schema.Types.ObjectId,
     ref: 'Program',
-    required: true,
   },
   isPromotedToLevel200: {
-    type: boolean,
+    type: Boolean,
     default: false,
   },
   isPromotedToLevel300: {
-    type: boolean,
+    type: Boolean,
     default: false,
   },
   isPromotedToLevel400: {
-    type: boolean,
+    type: Boolean,
     default: false,
   },
   isGraduated: {
-    type: boolean,
+    type: Boolean,
     default: false,
   },
   isSuspended: {
-    type: boolean,
+    type: Boolean,
     default: false,
   },
   prefectName: {
