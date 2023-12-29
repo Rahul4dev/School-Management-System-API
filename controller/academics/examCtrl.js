@@ -68,7 +68,12 @@ exports.createExam = AsyncHandler(async (req, res) => {
 //@route GET /api/v1/exams
 //@access Private
 exports.getAllExams = AsyncHandler(async (req, res) => {
-  const exams = await Exam.find();
+  const exams = await Exam.find().populate({
+    path: 'questions',
+    populate: {
+      path: 'createdBy',
+    },
+  });
   if (!exams) throw new Error('No subject found, please create a new one!');
 
   res.status(200).json({
